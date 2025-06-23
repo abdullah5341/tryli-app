@@ -1,0 +1,14 @@
+{
+  "name": "trend-analyzer",
+  "version": "1.0.0",
+  "description": "Shopify app to detect trending products and low stock",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "dotenv": "^16.3.1",
+    "express": "^4.19.2"
+  }
+}
