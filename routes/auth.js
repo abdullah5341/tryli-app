@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const axios = require('axios');
 
-// This is a mock simplified OAuth route (for learning/testing)
+// OAuth install step
 router.get('/auth', async (req, res) => {
   const shop = req.query.shop;
   if (!shop) return res.send("Missing shop param");
@@ -11,6 +11,7 @@ router.get('/auth', async (req, res) => {
   res.redirect(installUrl);
 });
 
+// OAuth callback step
 router.get('/auth/callback', async (req, res) => {
   const { shop, code } = req.query;
 
@@ -26,9 +27,8 @@ router.get('/auth/callback', async (req, res) => {
 
   console.log(`Access token for ${shop}:`, accessToken);
 
-  // Optional: Store token in memory/database here
-
-  res.send("✅ App installed! You can now use the API.");
+  // ✅ Redirect to embedded app inside Shopify Admin
+  res.redirect(`https://${shop}/admin/apps/${process.env.SHOPIFY_API_KEY}`);
 });
 
 module.exports = router;
