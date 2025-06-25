@@ -12,14 +12,19 @@ app.use(express.json());
 // Routes
 app.use('/api/trending-product', require('./routes/trending'));
 app.use('/api/low-stock', require('./routes/restock'));
-app.use('/', require('./routes/auth')); // 🔥 ADD THIS LINE
+app.use('/', require('./routes/auth')); // Shopify OAuth
 
-// Optional Home Page
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/views/index.html'));
+// Serve static frontend from dist
+app.use(express.static(path.join(__dirname, 'dist')));
+// Serve React build
+app.use(express.static(path.join(__dirname, 'dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-// Only one app.listen
+
+// Start server
 app.listen(PORT, () => {
   console.log(`✅ App running on http://localhost:${PORT}`);
 });
