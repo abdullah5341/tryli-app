@@ -1,5 +1,5 @@
 {
-  "name": "trend-analyzer",
+  "name": "tryli-backend",
   "version": "1.0.0",
   "description": "Shopify app to detect trending products and low stock",
   "main": "server.js",
