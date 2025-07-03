@@ -19,6 +19,11 @@ app.get('/webcam', (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/public/webcam.html'));
 });
 
+app.get('/webcam', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist/webcam.html'));
+});
+
+
 
 // Catch-all (for React SPA in dist)
 app.get('*', (req, res) => {

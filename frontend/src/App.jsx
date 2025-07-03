@@ -4,10 +4,13 @@ import './App.css';
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
 
-  // ✅ Listen for image messages from webcam window
+  // ✅ Listen for image messages from webcam.html
   useEffect(() => {
     const handleMessage = (event) => {
-      if (event.origin.startsWith("https://tryli-app-production.up.railway.app") && event.data.image) {
+      if (
+        event.origin.startsWith("https://tryli-app-production.up.railway.app") &&
+        event.data.image
+      ) {
         setImageSrc(event.data.image);
       }
     };
@@ -16,7 +19,8 @@ function App() {
   }, []);
 
   const openCamera = () => {
-      window.open('/capture', '_blank');
+    // ✅ Now opens /webcam not /capture
+    window.open('/webcam', '_blank');
   };
 
   return (
