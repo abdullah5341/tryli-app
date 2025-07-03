@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tryli - Webcam Capture</title>
+</head>
+<body style="text-align: center; padding: 2rem;">
+  <h1>📸 Capture Your Photo</h1>
+  <video id="video" width="320" height="240" autoplay></video>
+  <br><br>
+  <button id="capture">Capture</button>
+  <br><br>
+  <canvas id="canvas" width="320" height="240" style="border:1px solid black;"></canvas>
+
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const context = canvas.getContext('2d');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        alert("Camera access denied. Please allow permissions in browser.");
+        console.error("Camera error:", err);
+      });
+
+    document.getElementById('capture').addEventListener('click', () => {
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    });
+  </script>
+</body>
+</html>
