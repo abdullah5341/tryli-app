@@ -9,16 +9,20 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 
-// Shopify Auth Route
-app.use('/auth', require('./routes/auth')); // Shopify OAuth
+// ✅ Add this block to allow webcam in iframe
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", "frame-ancestors https://*.myshopify.com https://admin.shopify.com;");
+  res.setHeader("Permissions-Policy", "camera=(self)");
+  next();
+});
 
-// (Optional: Later you can add try-on specific routes here)
-// e.g., app.use('/api/virtual-try', require('./routes/tryon'))
+// Shopify Auth Route
+app.use('/auth', require('./routes/auth'));
 
 // Serve static frontend from dist
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Handle all other routes by serving index.html (for React Router SPA)
+// Handle all other routes by serving index.html
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
