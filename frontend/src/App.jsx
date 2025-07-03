@@ -1,10 +1,11 @@
-import './App.css';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Webcam from 'react-webcam';
+import './App.css';
 
 function App() {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const [cameraAllowed, setCameraAllowed] = useState(true);
 
   const capturePhoto = () => {
     if (webcamRef.current) {
@@ -12,10 +13,17 @@ function App() {
       if (screenshot) {
         setImageSrc(screenshot);
       } else {
-        alert("Failed to capture photo. Please check webcam permissions.");
+        setCameraAllowed(false);
       }
     }
   };
+
+  // Ask for permission on load
+  useEffect(() => {
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(() => setCameraAllowed(true))
+      .catch(() => setCameraAllowed(false));
+  }, []);
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
@@ -30,15 +38,24 @@ function App() {
 
       <hr style={{ margin: '2rem 0' }} />
 
-      <Webcam
-        ref={webcamRef}
-        audio={false}
-        screenshotFormat="image/jpeg"
-        width={320}
-        height={240}
-      />
-      <br />
-      <button onClick={capturePhoto}>📸 Capture Photo</button>
+      {cameraAllowed ? (
+        <>
+          <Webcam
+            ref={webcamRef}
+            audio={false}
+            screenshotFormat="image/jpeg"
+            width={320}
+            height={240}
+            videoConstraints={{ facingMode: "user" }}
+          />
+          <br />
+          <button onClick={capturePhoto}>📸 Capture Photo</button>
+        </>
+      ) : (
+        <div style={{ color: 'red', marginTop: '1rem' }}>
+          ❌ Camera access denied. Please allow webcam permissions in your browser settings.
+        </div>
+      )}
 
       {imageSrc && (
         <>
