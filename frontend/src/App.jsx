@@ -1,25 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
-<a href="/capture" target="_blank" rel="noopener noreferrer">
-  <button type="button">📷 Open Webcam Capture</button>
-</a>
-
-
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
 
-  // ✅ Listen for messages from capture.html
+  // ✅ Listen for image messages from webcam window
   useEffect(() => {
-    window.addEventListener('message', (event) => {
-      if (event.data.image) {
+    const handleMessage = (event) => {
+      if (event.origin.startsWith("https://tryli-app-production.up.railway.app") && event.data.image) {
         setImageSrc(event.data.image);
       }
-    });
+    };
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
   }, []);
 
   const openCamera = () => {
-    window.open('/capture', '_blank');
+    window.open('https://tryli-app-production.up.railway.app/webcam', '_blank');
   };
 
   return (
@@ -39,7 +36,7 @@ function App() {
 
       {imageSrc && (
         <>
-          <h3>Preview:</h3>
+          <h3>📸 Captured Preview:</h3>
           <img src={imageSrc} alt="Captured" style={{ maxWidth: '100%', marginTop: '1rem' }} />
         </>
       )}
