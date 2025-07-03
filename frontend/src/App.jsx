@@ -1,41 +1,45 @@
-import { useState } from 'react';
 import './App.css';
+import React, { useRef, useState } from 'react';
+import Webcam from 'react-webcam';
 
 function App() {
-  const [personImage, setPersonImage] = useState(null);
-  const [selectedClothing, setSelectedClothing] = useState('/clothes/tshirt1.png');
+  const webcamRef = useRef(null);
+  const [imageSrc, setImageSrc] = useState(null);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setPersonImage(URL.createObjectURL(file));
-    }
+  const capturePhoto = () => {
+    const screenshot = webcamRef.current.getScreenshot();
+    setImageSrc(screenshot);
   };
 
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
       <h1>🧥 Tryli - Virtual Try-On</h1>
-      <p>Upload your photo and try on clothes before buying!</p>
+      <p>Upload your photo or capture one using your webcam!</p>
 
-      <input type="file" accept="image/*" onChange={handleImageChange} />
-      <br /><br />
+      <form>
+        <input type="file" accept="image/*" />
+        <br /><br />
+        <button type="submit">Try On</button>
+      </form>
 
-      <div style={{ position: 'relative', width: '300px', height: '400px', margin: '0 auto', border: '1px solid #ccc' }}>
-        {personImage && (
-          <>
-            <img src={personImage} alt="User" style={{ width: '100%', height: '100%', objectFit: 'contain', position: 'absolute' }} />
-            <img src={selectedClothing} alt="Clothing" style={{ width: '100%', height: '100%', objectFit: 'contain', position: 'absolute', opacity: 0.9 }} />
-          </>
-        )}
-      </div>
+      <hr style={{ margin: '2rem 0' }} />
 
+      <Webcam
+        audio={false}
+        ref={webcamRef}
+        screenshotFormat="image/jpeg"
+        width={320}
+        height={240}
+      />
       <br />
-      <div>
-        <p>Choose Clothing:</p>
-        <button onClick={() => setSelectedClothing('/clothes/tshirt1.png')}>T-Shirt</button>
-        <button onClick={() => setSelectedClothing('/clothes/pants1.png')}>Pants</button>
-        <button onClick={() => setSelectedClothing('/clothes/frock1.png')}>Frock</button>
-      </div>
+      <button onClick={capturePhoto}>📸 Capture Photo</button>
+
+      {imageSrc && (
+        <>
+          <h3>Preview:</h3>
+          <img src={imageSrc} alt="Captured" style={{ maxWidth: '100%', marginTop: '1rem' }} />
+        </>
+      )}
     </div>
   );
 }
