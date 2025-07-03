@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 
+<a href="/capture" target="_blank" rel="noopener noreferrer">
+  <button type="button">📷 Open Webcam Capture</button>
+</a>
+
+
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
 

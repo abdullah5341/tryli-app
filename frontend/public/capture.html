@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Capture Webcam Photo</title>
+</head>
+<body style="text-align:center; padding:2rem">
+  <h1>📸 Capture Photo</h1>
+  <video id="video" autoplay playsinline width="320" height="240"></video>
+  <br /><br />
+  <button id="captureBtn">Capture Photo</button>
+  <br /><br />
+  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+  <script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const captureBtn = document.getElementById('captureBtn');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then(stream => video.srcObject = stream)
+      .catch(err => alert('Webcam permission denied or unavailable.'));
+
+    captureBtn.onclick = () => {
+      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imgData = canvas.toDataURL('image/jpeg');
+
+      // Send it back to opener (Shopify app)
+      if (window.opener) {
+        window.opener.postMessage({ image: imgData }, '*');
+        window.close();
+      } else {
+        alert("Unable to send image back.");
+      }
+    };
+  </script>
+</body>
+</html>
