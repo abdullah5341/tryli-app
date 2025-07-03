@@ -11,8 +11,8 @@ app.use(express.static(path.join(__dirname, 'public'))); // ✅ serve public fol
 app.use('/auth', require('./routes/auth'));
 
 // Serve external camera page
-app.get('/capture', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public/capture.html'));
+app.get('/webcam', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public/webcam.html'));
 });
 
 app.get('/webcam', (req, res) => {

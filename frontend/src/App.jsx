@@ -16,7 +16,7 @@ function App() {
   }, []);
 
   const openCamera = () => {
-    window.open('https://tryli-app-production.up.railway.app/webcam', '_blank');
+      window.open('/capture', '_blank');
   };
 
   return (
