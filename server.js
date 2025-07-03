@@ -9,16 +9,16 @@ const PORT = process.env.PORT || 3000;
 // ✅ Allow JSON parsing
 app.use(express.json());
 
-// ✅ Add headers to allow webcam/microphone inside Shopify iframe
+// ✅ Allow webcam/mic access inside Shopify iframe
 app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", "frame-ancestors https://*.myshopify.com https://admin.shopify.com;");
-  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader("Permissions-Policy", "camera=*, microphone=*, geolocation=*");
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
   res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
   next();
 });
 
-// ✅ Shopify OAuth (if needed)
+// ✅ Shopify OAuth
 app.use('/auth', require('./routes/auth'));
 
 // ✅ Serve frontend
