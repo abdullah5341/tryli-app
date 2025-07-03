@@ -6,28 +6,30 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+// ✅ Allow JSON parsing
 app.use(express.json());
 
-// ✅ Add this block to allow webcam in iframe
+// ✅ Add headers to allow webcam/microphone inside Shopify iframe
 app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", "frame-ancestors https://*.myshopify.com https://admin.shopify.com;");
-  res.setHeader("Permissions-Policy", "camera=(self)");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
+  res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
   next();
 });
 
-// Shopify Auth Route
+// ✅ Shopify OAuth (if needed)
 app.use('/auth', require('./routes/auth'));
 
-// Serve static frontend from dist
+// ✅ Serve frontend
 app.use(express.static(path.join(__dirname, 'dist')));
 
-// Handle all other routes by serving index.html
+// ✅ React SPA fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
 
-// Start server
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`✅ Tryli App running on http://localhost:${PORT}`);
 });

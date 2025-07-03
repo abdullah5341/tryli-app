@@ -7,8 +7,14 @@ function App() {
   const [imageSrc, setImageSrc] = useState(null);
 
   const capturePhoto = () => {
-    const screenshot = webcamRef.current.getScreenshot();
-    setImageSrc(screenshot);
+    if (webcamRef.current) {
+      const screenshot = webcamRef.current.getScreenshot();
+      if (screenshot) {
+        setImageSrc(screenshot);
+      } else {
+        alert("Failed to capture photo. Please check webcam permissions.");
+      }
+    }
   };
 
   return (
@@ -25,8 +31,8 @@ function App() {
       <hr style={{ margin: '2rem 0' }} />
 
       <Webcam
-        audio={false}
         ref={webcamRef}
+        audio={false}
         screenshotFormat="image/jpeg"
         width={320}
         height={240}
