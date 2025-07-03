@@ -1,37 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Capture Webcam Photo</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📸 Capture Photo - Tryli</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      padding: 2rem;
+      background: #f4f4f4;
+    }
+    video {
+      width: 320px;
+      height: 240px;
+      border: 2px solid #333;
+      margin-bottom: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin: 0.5rem;
+      cursor: pointer;
+    }
+    img {
+      margin-top: 1rem;
+      max-width: 100%;
+    }
+  </style>
 </head>
-<body style="text-align:center; padding:2rem">
+<body>
+
   <h1>📸 Capture Photo</h1>
-  <video id="video" autoplay playsinline width="320" height="240"></video>
-  <br /><br />
-  <button id="captureBtn">Capture Photo</button>
-  <br /><br />
-  <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+  <p>Click the button below to capture a photo from your webcam.</p>
+
+  <video id="webcam" autoplay playsinline></video>
+  <br />
+  <button onclick="capture()">📷 Capture</button>
+
+  <div id="preview"></div>
+
   <script>
-    const video = document.getElementById('video');
-    const canvas = document.getElementById('canvas');
-    const captureBtn = document.getElementById('captureBtn');
+    const video = document.getElementById('webcam');
 
     navigator.mediaDevices.getUserMedia({ video: true })
-      .then(stream => video.srcObject = stream)
-      .catch(err => alert('Webcam permission denied or unavailable.'));
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => {
+        alert("❌ Webcam access denied or not supported.");
+        console.error(err);
+      });
 
-    captureBtn.onclick = () => {
-      canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-      const imgData = canvas.toDataURL('image/jpeg');
+    function capture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || 320;
+      canvas.height = video.videoHeight || 240;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const dataUrl = canvas.toDataURL('image/jpeg');
 
-      // Send it back to opener (Shopify app)
-      if (window.opener) {
-        window.opener.postMessage({ image: imgData }, '*');
-        window.close();
-      } else {
-        alert("Unable to send image back.");
-      }
-    };
+      const img = document.createElement('img');
+      img.src = dataUrl;
+
+      document.getElementById('preview').innerHTML = '';
+      document.getElementById('preview').appendChild(img);
+
+      // 📝 TODO: Send `dataUrl` to Shopify backend or store it in state/localStorage if needed
+    }
   </script>
+
 </body>
 </html>
