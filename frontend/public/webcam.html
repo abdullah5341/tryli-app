@@ -17,7 +17,6 @@
     const canvas = document.getElementById('canvas');
     const context = canvas.getContext('2d');
 
-    // Ask for webcam permission
     navigator.mediaDevices.getUserMedia({ video: true })
       .then(stream => {
         video.srcObject = stream;
@@ -27,16 +26,16 @@
         console.error("Camera error:", err);
       });
 
-    // 🧠 Automatically send screenshot back to opener
     document.getElementById('capture').addEventListener('click', () => {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = canvas.toDataURL('image/jpeg');
 
-      // ✅ Send the image back to Shopify embedded app
-      const imageData = canvas.toDataURL("image/jpeg");
+      // ✅ Send image back to Shopify iframe/app
       if (window.opener) {
         window.opener.postMessage({ image: imageData }, "*");
+        alert("✅ Image sent back to Tryli app. You can now close this tab.");
       } else {
-        alert("No parent window found to send image to.");
+        alert("❌ Unable to communicate with parent window.");
       }
     });
   </script>
