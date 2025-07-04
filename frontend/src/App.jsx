@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import VirtualTryOn from './components/VirtualTryOn'; // ✅ 1. Add this line
+import VirtualTryOn from './components/VirtualTryOn'; // ✅ Keep this if you plan to embed it directly
 
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
@@ -73,7 +73,13 @@ function App() {
 
       <hr style={{ margin: '2rem 0' }} />
 
-      <VirtualTryOn /> {/* ✅ 2. Add this line */}
+      {/* ✅ Opens TryOn page in new tab */}
+      <button onClick={() => window.open('/tryon', '_blank')}>
+        🧍 Try Virtual Clothes On Body Photo
+      </button>
+
+      {/* Optional embedded mode */}
+      {/* <VirtualTryOn /> */}
     </div>
   );
 }
