@@ -28,6 +28,15 @@
 
     document.getElementById('capture').addEventListener('click', () => {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = canvas.toDataURL('image/jpeg');
+
+      // ✅ Send image back to Shopify iframe/app
+      if (window.opener) {
+        window.opener.postMessage({ image: imageData }, "*");
+        alert("✅ Image sent back to Tryli app. You can now close this tab.");
+      } else {
+        alert("❌ Unable to communicate with parent window.");
+      }
     });
   </script>
 </body>
