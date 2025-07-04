@@ -39,6 +39,13 @@ function App() {
       <p>Upload your photo or capture one using your webcam!</p>
 
       <form>
+  <input type="file" accept="image/*" />
+  <br /><br />
+  <button type="submit">Try On</button>
+  </form>
+
+
+      <form>
         <input type="file" accept="image/*" />
         <br /><br />
         <button type="submit">Try On</button>
