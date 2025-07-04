@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import VirtualTryOn from './components/VirtualTryOn'; // ✅ 1. Add this line
 
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
   const [bodyImage, setBodyImage] = useState(null);
 
-  // Handle messages from webcam window
   useEffect(() => {
     const handleMessage = (event) => {
       if (
@@ -35,7 +35,6 @@ function App() {
       <h1>🧥 Tryli - Virtual Try-On</h1>
       <p>Upload your photo or capture one using your webcam!</p>
 
-      {/* 👤 Face upload */}
       <form>
         <input type="file" accept="image/*" />
         <br /><br />
@@ -44,14 +43,10 @@ function App() {
 
       <hr style={{ margin: '2rem 0' }} />
 
-      {/* 📷 Webcam capture */}
       <button onClick={openCamera}>📸 Open Webcam in New Tab</button>
 
-      {/* 👤 Body upload */}
       <div style={{ marginTop: '1rem' }}>
-        <label htmlFor="bodyUpload" style={{ display: 'inline-block', marginTop: '1rem' }}>
-          <strong>👤 Upload Your Body Photo</strong>
-        </label>
+        <label htmlFor="bodyUpload"><strong>👤 Upload Your Body Photo</strong></label>
         <br />
         <input
           id="bodyUpload"
@@ -62,7 +57,6 @@ function App() {
         />
       </div>
 
-      {/* 📸 Webcam preview */}
       {imageSrc && (
         <>
           <h3>📸 Captured Preview:</h3>
@@ -70,13 +64,16 @@ function App() {
         </>
       )}
 
-      {/* 👤 Body preview */}
       {bodyImage && (
         <>
           <h3>👤 Body Photo Preview:</h3>
           <img src={bodyImage} alt="Body" style={{ maxWidth: '100%', marginTop: '1rem' }} />
         </>
       )}
+
+      <hr style={{ margin: '2rem 0' }} />
+
+      <VirtualTryOn /> {/* ✅ 2. Add this line */}
     </div>
   );
 }
