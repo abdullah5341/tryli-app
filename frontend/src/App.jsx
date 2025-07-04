@@ -4,7 +4,6 @@ import './App.css';
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
 
-  // ✅ Receive image from webcam.html via postMessage
   useEffect(() => {
     const handleMessage = (event) => {
       if (
@@ -18,6 +17,7 @@ function App() {
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
+  // ✅ FIXED: Open /webcam instead of /capture
   const openCamera = () => {
     const params = new URLSearchParams(window.location.search);
     const host = params.get("host");
@@ -37,7 +37,6 @@ function App() {
       </form>
 
       <hr style={{ margin: '2rem 0' }} />
-
       <button onClick={openCamera}>📸 Open Webcam in New Tab</button>
 
       {imageSrc && (
