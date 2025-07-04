@@ -28,6 +28,15 @@
 
     document.getElementById('capture').addEventListener('click', () => {
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const imageData = canvas.toDataURL('image/jpeg');
+
+      // ✅ Send captured image back to the opener window (Shopify app)
+      if (window.opener) {
+        window.opener.postMessage({ image: imageData }, "https://tryli-app-production.up.railway.app");
+        alert("✅ Image sent back to Tryli App.");
+      } else {
+        alert("❌ Could not send image back. No opener window.");
+      }
     });
   </script>
 </body>

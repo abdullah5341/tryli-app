@@ -6,6 +6,7 @@ function App() {
 
   useEffect(() => {
     const handleMessage = (event) => {
+      // ✅ Accept message only from trusted domain
       if (
         event.origin.startsWith("https://tryli-app-production.up.railway.app") &&
         event.data.image
@@ -17,12 +18,8 @@ function App() {
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
-  // ✅ FIXED: Open /webcam instead of /capture
   const openCamera = () => {
-    const params = new URLSearchParams(window.location.search);
-    const host = params.get("host");
-    const webcamUrl = `/webcam${host ? `?host=${host}` : ''}`;
-    window.open(webcamUrl, '_blank');
+    window.open('/webcam', '_blank'); // ✅ Opens webcam.html from root /dist folder
   };
 
   return (
@@ -37,6 +34,7 @@ function App() {
       </form>
 
       <hr style={{ margin: '2rem 0' }} />
+
       <button onClick={openCamera}>📸 Open Webcam in New Tab</button>
 
       {imageSrc && (
