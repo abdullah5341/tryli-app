@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
 
-  // ✅ Listen for image messages from webcam.html
+  // ✅ Receive image from webcam.html via postMessage
   useEffect(() => {
     const handleMessage = (event) => {
       if (
@@ -19,8 +19,10 @@ function App() {
   }, []);
 
   const openCamera = () => {
-    // ✅ Now opens /webcam not /capture
-    window.open('/webcam', '_blank');
+    const params = new URLSearchParams(window.location.search);
+    const host = params.get("host");
+    const webcamUrl = `/webcam${host ? `?host=${host}` : ''}`;
+    window.open(webcamUrl, '_blank');
   };
 
   return (

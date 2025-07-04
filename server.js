@@ -1,31 +1,25 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'dist')));
-app.use(express.static(path.join(__dirname, 'public'))); // ✅ serve public folder
 
-// Shopify OAuth
+// ✅ Serve frontend and static files
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// ✅ Shopify OAuth
 app.use('/auth', require('./routes/auth'));
 
-// Serve external camera page
+// ✅ Serve webcam.html directly from public/ folder
 app.get('/webcam', (req, res) => {
   res.sendFile(path.join(__dirname, 'public/webcam.html'));
 });
 
-app.get('/webcam', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/public/webcam.html'));
-});
-
-app.get('/webcam', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/webcam.html'));
-});
-
-
-
-// Catch-all (for React SPA in dist)
+// ✅ React SPA fallback (for all other routes)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'dist/index.html'));
 });
