@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import VirtualTryOn from './components/VirtualTryOn'; // Optional if embedding directly
+import VirtualTryOn from './components/VirtualTryOn'; // Optional if embedding
 
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
@@ -23,6 +23,12 @@ function App() {
     window.open('/webcam', '_blank');
   };
 
+  const openGuidedWebcam = () => {
+    const params = new URLSearchParams(window.location.search);
+    const host = params.get("host") || "";
+    window.open(`/guided-webcam?host=${host}`, '_blank');
+  };
+
   const handleBodyImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -30,30 +36,27 @@ function App() {
     }
   };
 
-  const openGuidedWebcam = () => {
-    const params = new URLSearchParams(window.location.search);
-    const host = params.get("host") || "";
-    window.open(`/guided-webcam?host=${host}`, '_blank');
-  };
-
   return (
-    <div style={{ padding: '2rem', textAlign: 'center' }}>
+    <div className="app-container">
       <h1>🧥 Tryli - Virtual Try-On</h1>
       <p>Upload your photo or capture one using your webcam!</p>
 
-      {/* Upload for face photo */}
+      {/* Upload face image */}
       <form>
         <input type="file" accept="image/*" />
         <br /><br />
         <button type="submit">Try On</button>
       </form>
 
-      <hr style={{ margin: '2rem 0' }} />
+      <hr className="divider" />
 
-      <button onClick={openCamera}>📸 Open Webcam in New Tab</button>
+      {/* Webcam button */}
+      <button className="primary-btn" onClick={openCamera}>
+        📸 Open Webcam in New Tab
+      </button>
 
-      {/* Upload body photo */}
-      <div style={{ marginTop: '1rem' }}>
+      {/* Upload body image */}
+      <div className="body-upload">
         <label htmlFor="bodyUpload"><strong>👤 Upload Your Body Photo</strong></label>
         <br />
         <input
@@ -61,37 +64,35 @@ function App() {
           type="file"
           accept="image/*"
           onChange={handleBodyImageUpload}
-          style={{ marginTop: '0.5rem' }}
         />
       </div>
 
+      {/* Previews */}
       {imageSrc && (
         <>
           <h3>📸 Captured Preview:</h3>
-          <img src={imageSrc} alt="Captured" style={{ maxWidth: '100%', marginTop: '1rem' }} />
+          <img src={imageSrc} alt="Captured" className="preview-img" />
         </>
       )}
-
       {bodyImage && (
         <>
           <h3>👤 Body Photo Preview:</h3>
-          <img src={bodyImage} alt="Body" style={{ maxWidth: '100%', marginTop: '1rem' }} />
+          <img src={bodyImage} alt="Body" className="preview-img" />
         </>
       )}
 
-      <hr style={{ margin: '2rem 0' }} />
+      <hr className="divider" />
 
-      {/* ✅ Link to overlay clothing on uploaded body image */}
-      <button onClick={() => window.open('/tryon', '_blank')}>
+      {/* Try-On & Guided Webcam */}
+      <button className="secondary-btn" onClick={() => window.open('/tryon', '_blank')}>
         🧍 Try Virtual Clothes On Body Photo
       </button>
 
-      {/* ✅ Link to guided webcam with host param */}
-      <button onClick={openGuidedWebcam}>
+      <button className="secondary-btn" onClick={openGuidedWebcam}>
         🎯 Open Guided Webcam
       </button>
 
-      {/* Optional: Uncomment to embed try-on directly */}
+      {/* Optional: Embed try-on */}
       {/* <VirtualTryOn /> */}
     </div>
   );
