@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>👕 Guided Virtual Try-On</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: sans-serif;
+      background: #f0f0f0;
+      padding: 2rem;
+    }
+
+    #video-container {
+      position: relative;
+      display: inline-block;
+      border: 2px solid #ccc;
+    }
+
+    #video {
+      width: 400px;
+      height: 500px;
+      background: black;
+    }
+
+    #overlay-shirt {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+
+    #guide-box {
+      position: absolute;
+      top: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 250px;
+      border: 2px dashed red;
+      pointer-events: none;
+    }
+
+    #instructions {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #444;
+    }
+
+    #capture-btn {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h2>👕 Guided Virtual Try-On</h2>
+
+  <input type="file" id="shirt-upload" accept="image/*" />
+  <br><br>
+
+  <div id="video-container">
+    <video id="video" autoplay></video>
+    <img id="overlay-shirt" src="" alt="Shirt Overlay" />
+    <div id="guide-box"></div>
+  </div>
+
+  <div id="instructions">Align your body within the red box</div>
+  <button id="capture-btn">📸 Capture</button>
+
+  <script>
+    const video = document.getElementById('video');
+    const overlayShirt = document.getElementById('overlay-shirt');
+    const shirtUpload = document.getElementById('shirt-upload');
+    const instructions = document.getElementById('instructions');
+
+    navigator.mediaDevices.getUserMedia({ video: true })
+      .then((stream) => {
+        video.srcObject = stream;
+      })
+      .catch((err) => {
+        alert("Camera access denied!");
+        console.error(err);
+      });
+
+    shirtUpload.addEventListener('change', function (e) {
+      const file = e.target.files[0];
+      if (file) {
+        overlayShirt.src = URL.createObjectURL(file);
+        instructions.textContent = "Move closer or farther to fit the shirt overlay";
+      }
+    });
+
+    document.getElementById('capture-btn').onclick = function () {
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0);
+      const dataURL = canvas.toDataURL('image/png');
+      window.open(dataURL);
+    };
+  </script>
+</body>
+</html>
