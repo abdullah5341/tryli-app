@@ -5,19 +5,8 @@ function App() {
   const [imageSrc, setImageSrc] = useState(null);
 
   useEffect(() => {
-  const handleMessage = (event) => {
-    if (event.data.image) {
-      setImageSrc(event.data.image);
-    }
-  };
-  window.addEventListener('message', handleMessage);
-  return () => window.removeEventListener('message', handleMessage);
-}, []);
-
-
-  useEffect(() => {
     const handleMessage = (event) => {
-      // ✅ Accept message only from trusted domain
+      // ✅ Accept messages only from trusted domain
       if (
         event.origin.startsWith("https://tryli-app-production.up.railway.app") &&
         event.data.image
@@ -30,7 +19,11 @@ function App() {
   }, []);
 
   const openCamera = () => {
-    window.open('/webcam', '_blank'); // ✅ Opens webcam.html from root /dist folder
+    window.open('/webcam', '_blank'); // ✅ Opens external webcam capture
+  };
+
+  const openUploadPage = () => {
+    window.open('/upload', '_blank'); // ✅ Opens your custom upload page
   };
 
   return (
@@ -38,13 +31,7 @@ function App() {
       <h1>🧥 Tryli - Virtual Try-On</h1>
       <p>Upload your photo or capture one using your webcam!</p>
 
-      <form>
-  <input type="file" accept="image/*" />
-  <br /><br />
-  <button type="submit">Try On</button>
-  </form>
-
-
+      {/* ✅ File Upload Form */}
       <form>
         <input type="file" accept="image/*" />
         <br /><br />
@@ -53,12 +40,11 @@ function App() {
 
       <hr style={{ margin: '2rem 0' }} />
 
+      {/* ✅ Webcam capture */}
       <button onClick={openCamera}>📸 Open Webcam in New Tab</button>
-
-      <button onClick={() => window.open('/upload', '_blank')}>
-  👤 Upload Your Body Photo
-      </button>
-
+      &nbsp;&nbsp;
+      {/* ✅ Upload user body photo */}
+      <button onClick={openUploadPage}>👤 Upload Your Body Photo</button>
 
       {imageSrc && (
         <>
