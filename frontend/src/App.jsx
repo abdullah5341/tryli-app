@@ -78,6 +78,11 @@ function App() {
         🧍 Try Virtual Clothes On Body Photo
       </button>
 
+      <Button onClick={() => window.open('/guided-webcam?host=' + new URLSearchParams(window.location.search).get("host"), '_blank')}>
+       🎯 Open Guided Webcam
+      </Button>
+
+
       {/* Optional embedded mode */}
       {/* <VirtualTryOn /> */}
     </div>
