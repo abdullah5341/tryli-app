@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Upload Your Body Photo</title>
+</head>
+<body style="text-align: center; padding: 2rem;">
+  <h1>👤 Upload Your Full-Body Photo</h1>
+  <input type="file" id="photoInput" accept="image/*" />
+  <br><br>
+  <img id="preview" style="max-width: 300px; border: 1px solid #ccc;" />
+  <br><br>
+  <button onclick="handleUpload()">Continue</button>
+
+  <script>
+    const photoInput = document.getElementById('photoInput');
+    const preview = document.getElementById('preview');
+
+    photoInput.addEventListener('change', () => {
+      const file = photoInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+
+          // Optionally: send to parent
+          if (window.opener) {
+            window.opener.postMessage({ uploaded: e.target.result }, "*");
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function handleUpload() {
+      alert("✅ Image uploaded! (Ready for try-on)");
+      // You can redirect or close the window here if needed
+    }
+  </script>
+</body>
+</html>

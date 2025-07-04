@@ -48,6 +48,11 @@ function App() {
 
       <button onClick={openCamera}>📸 Open Webcam in New Tab</button>
 
+      <button onClick={() => window.open('/upload', '_blank')}>
+  👤 Upload Your Body Photo
+      </button>
+
+
       {imageSrc && (
         <>
           <h3>📸 Captured Preview:</h3>
