@@ -8,25 +8,64 @@
       text-align: center;
       font-family: sans-serif;
       padding: 2rem;
+      background: #f4f4f4;
     }
+
+    h2 {
+      margin-bottom: 1rem;
+    }
+
     .canvas-area {
       position: relative;
       width: 300px;
       height: 400px;
       margin: 2rem auto;
       border: 1px solid #ccc;
-      background: #f9f9f9;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
+
     .canvas-area img {
       position: absolute;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
+      object-fit: cover;
+      pointer-events: none;
     }
+
+    #clothing-image {
+      opacity: 0.92;
+      z-index: 2;
+    }
+
+    #person-image {
+      z-index: 1;
+    }
+
+    input[type="file"] {
+      margin-top: 1rem;
+    }
+
+    .controls {
+      margin-top: 2rem;
+    }
+
     .controls button {
-      margin: 0.5rem;
-      padding: 0.5rem 1rem;
+      margin: 0.3rem;
+      padding: 0.5rem 1.2rem;
+      font-size: 1rem;
       cursor: pointer;
+      border: 1px solid #aaa;
+      background-color: #fff;
+      transition: background 0.3s;
+    }
+
+    .controls button.active {
+      background-color: #007aff;
+      color: white;
+      border-color: #007aff;
     }
   </style>
 </head>
@@ -34,16 +73,16 @@
   <h2>🧍 Tryli - Virtual Try-On Page</h2>
 
   <input type="file" accept="image/*" id="upload-image" />
-  
+
   <div class="canvas-area">
     <img id="person-image" alt="Person" />
-    <img id="clothing-image" alt="Clothing" style="opacity: 0.9;" />
+    <img id="clothing-image" alt="Clothing" />
   </div>
 
   <div class="controls">
-    <button onclick="setClothing('tshirt1.png')">👕 T-Shirt</button>
-    <button onclick="setClothing('pants1.png')">👖 Pants</button>
-    <button onclick="setClothing('frock1.png')">👗 Frock</button>
+    <button onclick="setClothing('tshirt1.png', this)">👕 T-Shirt</button>
+    <button onclick="setClothing('pants1.png', this)">👖 Pants</button>
+    <button onclick="setClothing('frock1.png', this)">👗 Frock</button>
   </div>
 
   <script>
@@ -58,8 +97,12 @@
       }
     });
 
-    function setClothing(fileName) {
+    function setClothing(fileName, btn) {
       clothingImg.src = `/clothes/${fileName}`;
+
+      // Highlight selected button
+      document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
   </script>
 </body>
