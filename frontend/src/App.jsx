@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import VirtualTryOn from './components/VirtualTryOn'; // ✅ Keep this if you plan to embed it directly
+import VirtualTryOn from './components/VirtualTryOn'; // Optional if embedding directly
 
 function App() {
   const [imageSrc, setImageSrc] = useState(null);
@@ -30,11 +30,18 @@ function App() {
     }
   };
 
+  const openGuidedWebcam = () => {
+    const params = new URLSearchParams(window.location.search);
+    const host = params.get("host") || "";
+    window.open(`/guided-webcam?host=${host}`, '_blank');
+  };
+
   return (
     <div style={{ padding: '2rem', textAlign: 'center' }}>
       <h1>🧥 Tryli - Virtual Try-On</h1>
       <p>Upload your photo or capture one using your webcam!</p>
 
+      {/* Upload for face photo */}
       <form>
         <input type="file" accept="image/*" />
         <br /><br />
@@ -45,6 +52,7 @@ function App() {
 
       <button onClick={openCamera}>📸 Open Webcam in New Tab</button>
 
+      {/* Upload body photo */}
       <div style={{ marginTop: '1rem' }}>
         <label htmlFor="bodyUpload"><strong>👤 Upload Your Body Photo</strong></label>
         <br />
@@ -73,17 +81,17 @@ function App() {
 
       <hr style={{ margin: '2rem 0' }} />
 
-      {/* ✅ Opens TryOn page in new tab */}
+      {/* ✅ Link to overlay clothing on uploaded body image */}
       <button onClick={() => window.open('/tryon', '_blank')}>
         🧍 Try Virtual Clothes On Body Photo
       </button>
 
-      <Button onClick={() => window.open('/guided-webcam?host=' + new URLSearchParams(window.location.search).get("host"), '_blank')}>
-       🎯 Open Guided Webcam
-      </Button>
+      {/* ✅ Link to guided webcam with host param */}
+      <button onClick={openGuidedWebcam}>
+        🎯 Open Guided Webcam
+      </button>
 
-
-      {/* Optional embedded mode */}
+      {/* Optional: Uncomment to embed try-on directly */}
       {/* <VirtualTryOn /> */}
     </div>
   );
