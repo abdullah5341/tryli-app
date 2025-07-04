@@ -5,6 +5,17 @@ function App() {
   const [imageSrc, setImageSrc] = useState(null);
 
   useEffect(() => {
+  const handleMessage = (event) => {
+    if (event.data.image) {
+      setImageSrc(event.data.image);
+    }
+  };
+  window.addEventListener('message', handleMessage);
+  return () => window.removeEventListener('message', handleMessage);
+}, []);
+
+
+  useEffect(() => {
     const handleMessage = (event) => {
       // ✅ Accept message only from trusted domain
       if (
