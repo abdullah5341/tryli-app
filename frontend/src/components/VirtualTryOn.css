@@ -32,3 +32,28 @@
   padding: 0.5rem 1rem;
   cursor: pointer;
 }
+
+.tryon-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.canvas {
+  position: relative;
+  width: fit-content;
+  margin: 1rem auto;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+}
+
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+.controls button {
+  margin: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
